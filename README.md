@@ -1,4 +1,4 @@
-#Hold Shift to Check Multiple Checkboxes
+# Hold Shift to Check Multiple Checkboxes
 
 A challenge done as part of [Javascript 30 days challenge by Wesbos](https://javascript30.com/). This is the 10th challenge from the series.
 

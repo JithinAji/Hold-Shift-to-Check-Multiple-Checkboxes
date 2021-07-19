@@ -1,6 +1,6 @@
-let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
 
-let lastChecked = null;
+let lastChecked = -1;
 
 const checkBoxEventListener = (eventName, applyMethod, isOn) => {
   if (isOn) {
@@ -14,9 +14,14 @@ const checkBoxEventListener = (eventName, applyMethod, isOn) => {
   }
 };
 
+const isChecked = (id) => {
+  if (checkBoxes[id].checked === true) return true;
+  else return false;
+};
+
 const selectCheckBoxEvent = (event) => {
   checkBoxes.forEach((checkBox, id) => {
-    if (checkBox === event.target) {
+    if (checkBox === event.target && isChecked(id)) {
       if (lastChecked < id) {
         selectCheckBox(lastChecked, id);
       } else {
@@ -27,17 +32,8 @@ const selectCheckBoxEvent = (event) => {
   });
 };
 
-const updateLastChecked = (event) => {
-  checkBoxes.forEach((checkBox, id) => {
-    if (checkBox === event.target) {
-      lastChecked = id;
-    }
-  });
-};
-
 const isShiftKeyDown = (e) => {
   if (e.keyCode === 16) {
-    checkBoxEventListener("click", updateLastChecked, false);
     checkBoxEventListener("click", selectCheckBoxEvent, true);
   }
 };
@@ -45,17 +41,17 @@ const isShiftKeyDown = (e) => {
 const isShiftKeyUp = (e) => {
   if (e.keyCode === 16) {
     checkBoxEventListener("click", selectCheckBoxEvent, false);
-    checkBoxEventListener("click", updateLastChecked, true);
+    lastChecked = -1;
   }
 };
 
 const selectCheckBox = (startId, endId) => {
-  for (; startId <= endId; startId++) {
-    checkBoxes[startId].checked = true;
+  if (lastChecked >= 0) {
+    for (; startId <= endId; startId++) {
+      checkBoxes[startId].checked = true;
+    }
   }
 };
 
 document.addEventListener("keydown", isShiftKeyDown);
 document.addEventListener("keyup", isShiftKeyUp);
-
-checkBoxEventListener("click", updateLastChecked, true);
